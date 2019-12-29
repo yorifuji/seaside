@@ -72,11 +72,6 @@ const vm = new Vue({
     layout: { label: "Auto", value: "auto" },
   },
   methods: {
-    on_select_skyway_mode: function (item) {
-      dtr(`on_select_skyway_mode`, item.label)
-      this.skyway.mode = item;
-      this.update_hash()
-    },
     on_call: function () {
       dtr(`on_call`)
       // disconnect
@@ -176,24 +171,6 @@ const vm = new Vue({
       this.users = users.concat(this.users.filter(user => !user.stream || user.stream.id != stream.id))
       this.update_video_layout();
     },
-    on_select_video_codec: function (item) {
-      dtr(`on_select_video_codec`, item.label)
-      if (this.video.codec == item) {
-        this.video.codec = "";
-      }
-      else {
-        this.video.codec = item;
-      }
-    },
-    on_select_audio_codec: function (item) {
-      dtr(`on_select_audio_codec`, item.label)
-      if (this.audio.codec == item) {
-        this.audio.codec = "";
-      }
-      else {
-        this.audio.codec = item;
-      }
-    },
     on_select_size: function (item) {
       dtr(`on_select_size`, item.label)
       if (this.video.size == item) {
@@ -213,15 +190,6 @@ const vm = new Vue({
         this.video.fps = item;
       }
       this.step2(this.get_constraints());
-    },
-    on_select_bandwidth: function (item) {
-      dtr(`on_select_bandwidth`, item.label)
-      if (this.video.bandwidth == item) {
-        this.video.bandwidth = "";
-      }
-      else {
-        this.video.bandwidth = item;
-      }
     },
     on_select_camera: function (device) {
       dtr(`on_select_camera`, device.label)
@@ -276,18 +244,6 @@ const vm = new Vue({
       dtr(`on_select_layout`, item.label)
       this.layout = item;
       this.update_video_layout();
-    },
-    on_select_stats: function () {
-      dtr(`on_select_stats:`)
-      if (this.skyway.stats) {
-        clearInterval(window.timer_stats);
-        this.skyway.stats = null;
-      }
-      else {
-        window.timer_stats = setInterval(() => {
-          if (this.skyway.call) getRTCStats(this.skyway.call._negotiator._pc.getStats());
-        }, 2000);
-      }
     },
     on_select_screen_share: async function () {
       dtr(`on_select_screen_share:`);
