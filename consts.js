@@ -28,11 +28,11 @@ const consts = {
     ],
     bandwidth: [
       { label: "default", value: null },
-      { label: "10Mbps", value: 10000 },
-      { label: "5Mbps", value: 5000 },
-      { label: "3Mbps", value: 3000 },
-      { label: "1Mbps", value: 1000 },
-      { label: "500kbps", value: 500 },
+      { label: "10Mbps", value: 10 * 1024 },
+      { label: "5Mbps", value: 5 * 1024 },
+      { label: "3Mbps", value: 3 * 1024 },
+      { label: "1Mbps", value: 1024 },
+      { label: "512kbps", value: 512 },
     ],
   },
   audio: {
