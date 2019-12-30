@@ -1,21 +1,51 @@
 "use strict";
 
-// debug trace
-// const startup_date = Date.now();
-// const dtr = (...params) => console.log(`TRACE:${Date.now() - startup_date}:`, params)
-// dtr("debug", "trace", 1, 2, 3, 4, new Date, "test");
-
 const dtr = console.log
 
 const vm = new Vue({
   el: "#vue-app",
   data: {
     users: [],          // include myself
+    messages: [],
     local_stream: null, // myself
     local_screen: null, // screen share stream
-    debug: {
-      self_translation: false
+    skyway: {
+      mode: { label: "Mesh", value: "mesh" },
+      peer: null,
+      call: null, // MediaConnection
+      room: null, // MeshRoom, SFURoom
+      peerId: null,
+      callto: null,
+      transmit: "sr"
     },
+    camera: {
+      device: [],
+      using: null,
+    },
+    microphone: {
+      device: [],
+      using: null,
+      mute: false,
+    },
+    speaker: {
+      device: [],
+      using: null,
+      mute: false,
+      selectable: 'sinkId' in HTMLMediaElement.prototype,
+      volume: 1.0
+    },
+    video: {
+      codec: { label: "default", value: null },
+      bandwidth: { label: "default", value: null },
+      size: null,
+      fps: null,
+    },
+    audio: {
+      codec: { label: "default", value: null },
+      bandwidth: { label: "default", value: null },
+    },
+    renderer: { label: "Cover", value: "cover" },
+    layout: { label: "Auto", value: "auto" },
     feature: {
       transcription: false,
       translation: false,
@@ -31,44 +61,9 @@ const vm = new Vue({
     translation: {
       api: "",
     },
-    messages: [],
-    skyway: {
-      mode: { label: "Mesh", value: "mesh" },
-      peer: null,
-      call: null, // MediaConnection
-      room: null, // MeshRoom, SFURoom
-      peerId: null,
-      callto: null,
-      transmit: "sr"
+    debug: {
+      self_translation: false
     },
-    microphone: {
-      device: [],
-      using: null,
-      mute: false,
-    },
-    speaker: {
-      device: [],
-      using: null,
-      mute: false,
-      selectable: 'sinkId' in HTMLMediaElement.prototype,
-      volume: 1.0
-    },
-    camera: {
-      device: [],
-      using: null,
-    },
-    video: {
-      codec: { label: "default", value: null },
-      bandwidth: { label: "default", value: null },
-      size: null,
-      fps: null,
-    },
-    audio: {
-      codec: { label: "default", value: null },
-      bandwidth: { label: "default", value: null },
-    },
-    renderer: { label: "Cover", value: "cover" },
-    layout: { label: "Auto", value: "auto" },
   },
   methods: {
     on_call: function () {
@@ -85,30 +80,22 @@ const vm = new Vue({
         return;
       }
 
-      if (this.skyway.mode.value == "p2p") {
-        // call
-        this.skyway.call = this.skyway.peer.call(this.skyway.callto, this.is_recvonly ? null : this.get_localstream_outbound(), this.make_skyway_options());
-        dtr(`call`, this.skyway.call);
+      if (this.is_p2p) {
+        this.skyway.call = this.skyway.peer.call(this.skyway.callto, this.get_localstream_outbound(), this.make_skyway_options());
         this.step4(this.skyway.call);
       }
-      else if (this.skyway.mode.value == "mesh") {
+      else if (this.is_mesh) {
         const options = this.make_skyway_options()
         options.mode = 'mesh'
-        options.stream = this.is_recvonly ? null : this.get_localstream_outbound()
+        options.stream = this.get_localstream_outbound()
         this.skyway.room = this.skyway.peer.joinRoom('mesh_video_' + this.skyway.callto, options);
-        dtr(`room`, this.skyway.room);
         this.step3(this.skyway.room);
       }
-      else if (this.skyway.mode.value == "sfu") {
+      else if (this.is_sfu) {
         const options = { mode: 'sfu', stream: this.get_localstream_outbound() };
-        dtr(`options`, options);
-
         this.skyway.room = this.skyway.peer.joinRoom('sfu_video_' + this.skyway.callto, options);
-        dtr(`room`, this.skyway.room);
-
         this.step3(this.skyway.room);
       }
-
     },
     update_hash: function () {
       dtr(`update_hash:`)
@@ -139,7 +126,7 @@ const vm = new Vue({
       else {
         this.video.size = item;
       }
-      this.step2(this.get_constraints());
+      this.step2(this.make_constraints());
     },
     on_select_fps: function (item) {
       dtr(`on_select_fps`, item.label)
@@ -149,7 +136,7 @@ const vm = new Vue({
       else {
         this.video.fps = item;
       }
-      this.step2(this.get_constraints());
+      this.step2(this.make_constraints());
     },
     on_select_camera: function (device) {
       dtr(`on_select_camera`, device.label)
@@ -159,7 +146,7 @@ const vm = new Vue({
       else {
         this.camera.using = device;
       }
-      this.step2(this.get_constraints());
+      this.step2(this.make_constraints());
     },
     on_select_microphone: function (device) {
       dtr(`on_select_microphone`, device.label)
@@ -169,7 +156,7 @@ const vm = new Vue({
       else {
         this.microphone.using = device;
       }
-      this.step2(this.get_constraints());
+      this.step2(this.make_constraints());
     },
     on_select_microphone_mute: function () {
       dtr(`on_select_microphone_mute`)
@@ -621,8 +608,8 @@ const vm = new Vue({
       this.users = this.users.filter(user => user.peerId == this.skyway.peer.id);
       this.update_video_layout();
     },
-    get_constraints: function () {
-      dtr(`get_constraints:`)
+    make_constraints: function () {
+      dtr(`make_constraints:`)
       const ct = { video: false, audio: false };
       if (this.camera.device && this.camera.device.length) {
         const fmt = {};
@@ -678,8 +665,12 @@ const vm = new Vue({
       this.update_devicelist(devices);
 
       if (this.microphone.device.length == 0 && this.camera.device.length == 0) {
-        alert("Error, No microphone and camera.")
-        return;
+        if (this.is_sfu) {
+          alert("Can't use microphone and camera")
+          return
+        }
+        alert("Can't use microphone and camera, work as receive only.")
+        this.skyway.transmit = "r"
       }
 
       const constraints = { video: false, audio: false };
@@ -889,6 +880,9 @@ const vm = new Vue({
     },
     get_localstream_outbound: function() {
       dtr(`get_localstream_outbound`)
+
+      if (this.is_recvonly) return null
+
       // video track
       const outbound_stream = new MediaStream(this.local_screen ? this.local_screen.getVideoTracks() : this.local_stream.getVideoTracks());
       // audio track
@@ -1025,7 +1019,7 @@ const vm = new Vue({
       peer.on('call', call => {
         dtr("peer.on('call'", call)
         this.skyway.call = call;
-        this.skyway.call.answer(this.is_recvonly ? null : this.get_localstream_outbound(), this.make_skyway_options(true));
+        this.skyway.call.answer(this.get_localstream_outbound(), this.make_skyway_options(true));
         this.step4(this.skyway.call);
       });
     },
