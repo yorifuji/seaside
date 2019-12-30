@@ -59,14 +59,14 @@ const vm = new Vue({
       using: null,
     },
     video: {
-      codec: "",
+      codec: { label: "default", value: null },
+      bandwidth: { label: "default", value: null },
       size: null,
       fps: null,
-      bandwidth: "",
     },
     audio: {
-      codec: "",
-      bandwidth: "",
+      codec: { label: "default", value: null },
+      bandwidth: { label: "default", value: null },
     },
     renderer: { label: "Cover", value: "cover" },
     layout: { label: "Auto", value: "auto" },
@@ -87,56 +87,17 @@ const vm = new Vue({
       }
 
       if (this.skyway.mode.value == "p2p") {
-
-        // setup options
-        const options = {};
-        if (this.video.codec != "") {
-          options.videoCodec = this.video.codec.value;
-        }
-        if (this.audio.codec != "") {
-          options.audioCodec = this.audio.codec.value;
-        }
-        if (this.video.bandwidth != "") {
-          options.videoBandwidth = this.video.bandwidth.value
-        }
-        if (this.audio.bandwidth != "") {
-          options.audioBandwidth = this.audio.bandwidth.value
-        }
-        if (this.is_recvonly) {
-          options.videoReceiveEnabled = true
-          options.audioReceiveEnabled = true
-        }
-        dtr(`options`, options);
-
         // call
-        this.skyway.call = this.skyway.peer.call(this.skyway.callto, this.is_recvonly ? null : this.get_localstream_outbound(), options);
+        this.skyway.call = this.skyway.peer.call(this.skyway.callto, this.is_recvonly ? null : this.get_localstream_outbound(), this.make_skyway_options());
         dtr(`call`, this.skyway.call);
-
         this.step4(this.skyway.call);
       }
       else if (this.skyway.mode.value == "mesh") {
-        const options = { mode: 'mesh', stream: this.is_recvonly ? null : this.get_localstream_outbound() };
-        if (this.video.codec != "") {
-          options.videoCodec = this.video.codec.value;
-        }
-        if (this.audio.codec != "") {
-          options.audioCodec = this.audio.codec.value;
-        }
-        if (this.video.bandwidth != "") {
-          options.videoBandwidth = this.video.bandwidth.value
-        }
-        if (this.audio.bandwidth != "") {
-          options.audioBandwidth = this.audio.bandwidth.value
-        }
-        if (this.is_recvonly) {
-          options.videoReceiveEnabled = true
-          options.audioReceiveEnabled = true
-        }
-        dtr(`options`, options);
-
+        const options = this.make_skyway_options()
+        options.mode = 'mesh'
+        options.stream = this.is_recvonly ? null : this.get_localstream_outbound()
         this.skyway.room = this.skyway.peer.joinRoom('mesh_video_' + this.skyway.callto, options);
         dtr(`room`, this.skyway.room);
-
         this.step3(this.skyway.room);
       }
       else if (this.skyway.mode.value == "sfu") {
@@ -1064,31 +1025,36 @@ const vm = new Vue({
 
       peer.on('call', call => {
         dtr("peer.on('call'", call)
-
         this.skyway.call = call;
-
-        const options = {};
-        if (this.video.codec != "") {
-          options.videoCodec = this.video.codec.value;
-        }
-        if (this.audio.codec != "") {
-          options.audioCodec = this.audio.codec.value;
-        }
-        if (this.video.bandwidth != "") {
-          options.videoBandwidth = this.video.bandwidth.value
-        }
-        if (this.audio.bandwidth != "") {
-          options.audioBandwidth = this.audio.bandwidth.value
-        }
-        dtr(options);
-
-        this.skyway.call.answer(this.is_recvonly ? null : this.get_localstream_outbound(), options);
+        this.skyway.call.answer(this.is_recvonly ? null : this.get_localstream_outbound(), this.make_skyway_options(true));
         this.step4(this.skyway.call);
       });
     },
     on_speaker_volume: function() {
       jQuery('#modal-speaker-volume').modal({show:true, backdrop:'static'})
     },
+    make_skyway_options: function(is_answer) {
+        // setup options
+        const options = {};
+        if (this.video.codec.value != null) {
+          options.videoCodec = this.video.codec.value;
+        }
+        if (this.audio.codec.value != null) {
+          options.audioCodec = this.audio.codec.value;
+        }
+        if (this.video.bandwidth.value != null) {
+          options.videoBandwidth = this.video.bandwidth.value
+        }
+        if (this.audio.bandwidth.value != null) {
+          options.audioBandwidth = this.audio.bandwidth.value
+        }
+        if (!is_answer && this.is_recvonly) {
+          options.videoReceiveEnabled = true
+          options.audioReceiveEnabled = true
+        }
+        dtr(`make_skyway_options`, options);
+        return options
+    }
   },
   computed: {
     rendererUsers: function () {

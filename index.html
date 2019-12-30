@@ -225,7 +225,6 @@
                   <div class="form-group">
                     <label for="video-codec">Video Codec</label>
                     <select class="form-control" id="video-codec" v-model="video.codec" :disabled="skyway.mode.value == 'sfu'">
-                      <option value="">default</option>
                       <option v-for="codec in consts.video.codec" v-bind:value="codec">{{ codec.label }}</option>
                       </select>
                   </div>
@@ -234,7 +233,6 @@
                   <div class="form-group">
                     <label for="audio-codec">Audio Codec</label>
                     <select class="form-control" id="audio-codec" v-model="audio.codec" :disabled="skyway.mode.value == 'sfu'">
-                      <option value="">default</option>
                       <option v-for="codec in consts.audio.codec" v-bind:value="codec">{{ codec.label }}</option>
                       </select>
                   </div>
@@ -245,7 +243,6 @@
                   <div class="form-group">
                     <label for="video-bandwidth">Video Bandwidth</label>
                     <select class="form-control" id="video-bandwidth" v-model="video.bandwidth" :disabled="skyway.mode.value == 'sfu'">
-                      <option value="">default</option>
                       <option v-for="bandwidth in consts.video.bandwidth" v-bind:value="bandwidth">{{ bandwidth.label }}</option>
                     </select>
                   </div>
@@ -254,7 +251,6 @@
                   <div class="form-group">
                     <label for="audio-bandwidth">Audio Bandwidth</label>
                     <select class="form-control" id="audio-bandwidth" v-model="audio.bandwidth" :disabled="skyway.mode.value == 'sfu'">
-                      <option value="">default</option>
                       <option v-for="bandwidth in consts.audio.bandwidth" v-bind:value="bandwidth">{{ bandwidth.label }}</option>
                     </select>
                   </div>

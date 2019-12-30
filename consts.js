@@ -10,6 +10,7 @@ const consts = {
   },
   video: {
     codec: [
+      { label: "default", value: null },
       { label: "VP8", value: "VP8" },
       { label: "VP9", value: "VP9" },
       { label: "H.264", value: "H264" },
@@ -26,8 +27,7 @@ const consts = {
       { label: "15 fps", value: 15 },
     ],
     bandwidth: [
-      { label: "30Mbps", value: 30000 },
-      { label: "20Mbps", value: 20000 },
+      { label: "default", value: null },
       { label: "10Mbps", value: 10000 },
       { label: "5Mbps", value: 5000 },
       { label: "3Mbps", value: 3000 },
@@ -37,6 +37,7 @@ const consts = {
   },
   audio: {
     codec: [
+      { label: "default", value: null },
       { label: "Opus", value: "opus" },
       { label: "iSAC", value: "ISAC" },
       { label: "G.722", value: "G722" },
@@ -44,6 +45,7 @@ const consts = {
       { label: "PCMA(G.711 a-law)", value: "PCMA" }
     ],
     bandwidth: [
+      { label: "default", value: null },
       { label: "512kbps", value: 512 },
       { label: "256kbps", value: 256 },
       { label: "128kbps", value: 128 },
