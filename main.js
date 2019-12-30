@@ -35,11 +35,10 @@ const vm = new Vue({
     skyway: {
       mode: { label: "Mesh", value: "mesh" },
       peer: null,
-      call: null,
-      room: null,
+      call: null, // MediaConnection
+      room: null, // MeshRoom, SFURoom
       peerId: null,
       callto: null,
-      stats: "",
       transmit: "sr"
     },
     microphone: {
