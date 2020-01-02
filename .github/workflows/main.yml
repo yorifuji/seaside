@@ -17,10 +17,10 @@ jobs:
         git config --global user.email yorifuji@gmail.com
         git config --global user.name  github-actions
         git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
-    - name: Checkout and Merge
+    - name: Merge
       run: |
-        git checkout gh-pages
-        git merge origin/master
+        git merge origin/gh-pages
+        git branch -f gh-pages
     - name: Push
       env:
         GITHUB_TOKEN: ${{ secrets.X_GITHUB_PAT }}
