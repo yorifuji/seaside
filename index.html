@@ -94,6 +94,8 @@
                 <div class="dropdown-divider"></div>
                 <button type="button" class="dropdown-item" v-for="item in consts.video.fps" :class="{active : video.fps && item.value == video.fps.value}" @click="on_select_fps(item)">{{ item.label }}</button>
                 <div class="dropdown-divider"></div>
+                <button type="button" class="dropdown-item" :class="{active : camera.mute}" @click="on_select_camera_mute()">Mute</button>
+                <div class="dropdown-divider"></div>
                 <button type="button" class="dropdown-item" v-for="cam in camera.device" :class="{active : camera.using && camera.using.deviceId == cam.deviceId}" @click="on_select_camera(cam)">{{ cam.label }}</button>
               </div>
             </li>

@@ -21,6 +21,7 @@ const vm = new Vue({
     camera: {
       device: [],
       using: null,
+      mute: false,
     },
     microphone: {
       device: [],
@@ -147,6 +148,18 @@ const vm = new Vue({
         this.camera.using = device;
       }
       this.step2(this.make_constraints());
+    },
+    on_select_camera_mute: function () {
+      dtr(`on_select_camera_mute`)
+      this.camera.mute = !this.camera.mute;
+      this.set_stream(this.skyway.peer.id, this.get_localstream_video());
+      // replace stream
+      if (this.skyway.call) {
+        this.skyway.call.replaceStream(this.get_localstream_outbound());
+      }
+      else if (this.skyway.room) {
+        this.skyway.room.replaceStream(this.get_localstream_outbound());
+      }
     },
     on_select_microphone: function (device) {
       dtr(`on_select_microphone`, device.label)
@@ -874,7 +887,11 @@ const vm = new Vue({
         return new MediaStream(this.local_screen.getVideoTracks());
       }
       else if (this.local_stream && this.local_stream.getVideoTracks().length) {
-        return new MediaStream(this.local_stream.getVideoTracks())
+        const stream = new MediaStream(this.local_stream.getVideoTracks())
+        for (var i = 0; i < stream.getVideoTracks().length; ++i) {
+          stream.getVideoTracks()[i].enabled = !this.camera.mute
+        }
+        return stream
       }
       return new MediaStream();
     },
@@ -885,6 +902,12 @@ const vm = new Vue({
 
       // video track
       const outbound_stream = new MediaStream(this.local_screen ? this.local_screen.getVideoTracks() : this.local_stream.getVideoTracks());
+      if (this.camera.mute && !this.local_screen) {
+        for (var i = 0; i < outbound_stream.getVideoTracks().length; ++i) {
+          outbound_stream.getVideoTracks()[i].enabled = false
+        }
+      }
+
       // audio track
       if (this.microphone.mute) {
         outbound_stream.addTrack(this.get_silent_audio_track());
