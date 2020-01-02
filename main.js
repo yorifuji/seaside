@@ -1070,7 +1070,10 @@ const vm = new Vue({
         }
         dtr(`make_skyway_options`, options);
         return options
-    }
+    },
+    selectable_audio_codecs: function (codecs) {
+      return this.is_firefox ? codecs.filter(codec => codec.value != "ISAC") : codecs
+    },
   },
   computed: {
     rendererUsers: function () {
@@ -1117,7 +1120,10 @@ const vm = new Vue({
     },
     is_recvonly: function () {
       return this.skyway.transmit == "r"
-    }
+    },
+    is_firefox: function () {
+      return navigator.userAgent.search("Firefox") != -1
+    },
   },
   mounted: function () {
     dtr(`mounted`)
