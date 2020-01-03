@@ -10,18 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Setup
+    - name: setup
       env:
-        GITHUB_TOKEN: ${{ secrets.X_GITHUB_PAT }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         git config --global user.email yorifuji@gmail.com
         git config --global user.name  github-actions
-        git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
-    - name: Merge
+        git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+    - name: merge
       run: |
         git merge origin/gh-pages
         git branch -f gh-pages
-    - name: Push
+    - name: push
       env:
-        GITHUB_TOKEN: ${{ secrets.X_GITHUB_PAT }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: git push origin gh-pages
