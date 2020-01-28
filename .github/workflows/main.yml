@@ -12,22 +12,16 @@ jobs:
     - uses: actions/checkout@v1
     - name: Setup
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.X_GITHUB_PAT }}
       run: |
         git config --global user.email yorifuji@gmail.com
         git config --global user.name  github-actions
-        git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+        git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
     - name: Merge
       run: |
         git merge origin/gh-pages
         git branch -f gh-pages
     - name: Push
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.X_GITHUB_PAT }}
       run: git push origin gh-pages
-    - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@releases/v3
-      with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BRANCH: gh-pages
-        FOLDER: .
