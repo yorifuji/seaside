@@ -89,12 +89,12 @@ const vm = new Vue({
         const options = this.make_skyway_options()
         options.mode = 'mesh'
         options.stream = this.get_localstream_outbound()
-        this.skyway.room = this.skyway.peer.joinRoom('mesh_video_' + this.skyway.callto, options);
+        this.skyway.room = this.skyway.peer.joinRoom(this.skyway.callto, options);
         this.step3(this.skyway.room);
       }
       else if (this.is_sfu) {
         const options = { mode: 'sfu', stream: this.get_localstream_outbound() };
-        this.skyway.room = this.skyway.peer.joinRoom('sfu_video_' + this.skyway.callto, options);
+        this.skyway.room = this.skyway.peer.joinRoom(this.skyway.callto, options);
         this.step3(this.skyway.room);
       }
     },
