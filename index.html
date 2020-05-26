@@ -143,7 +143,7 @@
           <span class="navbar-brand" :class="{invisible : !is_p2p }" v-cloak>{{ skyway.peer ? skyway.peer.id  : "" }}</span>
           <form class="form-inline mt-2 mt-md-0" @submit.prevent="on_call">
             <input class="form-control mr-sm-2" type="text" :placeholder="is_p2p ? resource.text.input_peer : resource.text.input_room" aria-label="call" v-model="skyway.callto" :readonly="is_online">
-            <button class="btn btn-outline-success my-2 my-sm-0" v-cloak>{{ (skyway.call || skyway.room) ? "leave" : is_p2p ? resource.text.call : resource.text.join }}</button>
+            <button class="btn btn-outline-success my-2 my-sm-0" v-cloak>{{ (skyway.call || skyway.room) ? resource.text.leave : is_p2p ? resource.text.call : resource.text.join }}</button>
           </form>
         </div>
       </nav>
