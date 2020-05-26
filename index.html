@@ -88,39 +88,39 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_camera" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}">Camera</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_camera" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}">{{ resource.text.camera }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown10">
                 <button type="button" class="dropdown-item" v-for="item in consts.video.size" :class="{active : video.size && item.value == video.size.value}" @click="on_select_size(item)">{{ item.label }}</button>
                 <div class="dropdown-divider"></div>
                 <button type="button" class="dropdown-item" v-for="item in consts.video.fps" :class="{active : video.fps && item.value == video.fps.value}" @click="on_select_fps(item)">{{ item.label }}</button>
                 <div class="dropdown-divider"></div>
-                <button type="button" class="dropdown-item" :class="{active : camera.mute}" @click="on_select_camera_mute()">Mute</button>
+                <button type="button" class="dropdown-item" :class="{active : camera.mute}" @click="on_select_camera_mute()">{{ resource.text.mute }}</button>
                 <div class="dropdown-divider"></div>
                 <button type="button" class="dropdown-item" v-for="cam in camera.device" :class="{active : camera.using && camera.using.deviceId == cam.deviceId}" @click="on_select_camera(cam)">{{ cam.label }}</button>
               </div>
             </li>
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_microphone" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : !has_microphone || is_recvonly}">Microphone</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_microphone" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : !has_microphone || is_recvonly}">{{ resource.text.microphone }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_microphone">
-                <button type="button" class="dropdown-item" :class="{active : microphone.mute}" @click="on_select_microphone_mute()">Mute</button>
+                <button type="button" class="dropdown-item" :class="{active : microphone.mute}" @click="on_select_microphone_mute()">{{ resource.text.mute }}</button>
                 <div class="dropdown-divider"></div>
                 <button type="button" class="dropdown-item" v-for="mic in microphone.device" :class="{active : microphone.using && microphone.using.deviceId == mic.deviceId}" @click="on_select_microphone(mic)">{{ mic.label }}</button>
               </div>
             </li>
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_speaker" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : !has_speaker || is_sendonly}">Speaker</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_speaker" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : !has_speaker || is_sendonly}">{{ resource.text.speaker }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_speaker">
-                <button type="button" class="dropdown-item" @click="on_speaker_volume()">Volume</button>
+                <button type="button" class="dropdown-item" @click="on_speaker_volume()">{{ resource.text.volume }}</button>
                 <div class="dropdown-divider"></div>
-                <button type="button" class="dropdown-item" :class="{active : speaker.mute}" @click="on_select_speaker_mute()">Mute</button>
+                <button type="button" class="dropdown-item" :class="{active : speaker.mute}" @click="on_select_speaker_mute()">{{ resource.text.mute }}</button>
                 <div class="dropdown-divider"></div>
                 <button type="button" class="dropdown-item" v-for="dev in speaker.device" :class="{active : speaker.using && speaker.using.deviceId == dev.deviceId}" @click="on_select_speaker(dev)">{{ dev.label }}</button>
               </div>
             </li>
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_layout" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Layout</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_layout" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ resource.text.layout }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_layout">
-                <button type="button" class="dropdown-item" @click="on_toggle_fullscreen()">Toggle Fullscreen</button>
+                <button type="button" class="dropdown-item" @click="on_toggle_fullscreen()">{{ resource.text.fullscreen }}</button>
                 <div class="dropdown-divider"></div>
                 <button type="button" class="dropdown-item" v-for="item in consts.layout" :class="{active : item.value == layout.value}" @click="on_select_layout(item)">{{ item.label }}</button>
                 <div class="dropdown-divider"></div>
@@ -128,22 +128,22 @@
               </div>
             </li>
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_share" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}">Share</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_share" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}">{{ resource.text.share }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_layout">
-                <button type="button" class="dropdown-item" @click="on_select_screen_share()">{{ local_screen ? "Stop Screen Share" : "Start Screen Share"}}</button>
+                <button type="button" class="dropdown-item" @click="on_select_screen_share()">{{ local_screen ? resource.text.share_finish : resource.text.share_start}}</button>
               </div>
             </li>
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_share" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}">Experimental</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_share" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}">{{ resource.text.experimental }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_layout">
-                <button type="button" class="dropdown-item" @click="on_select_recognition()">Speech Recognition</button>
+                <button type="button" class="dropdown-item" @click="on_select_recognition()">{{ resource.text.voice_recognition }}</button>
               </div>
             </li>
           </ul>
           <span class="navbar-brand" :class="{invisible : !is_p2p }" v-cloak>{{ skyway.peer ? skyway.peer.id  : "" }}</span>
           <form class="form-inline mt-2 mt-md-0" @submit.prevent="on_call">
-            <input class="form-control mr-sm-2" type="text" :placeholder="is_p2p ? 'Input PeerID' : 'Input Room Name'" aria-label="call" v-model="skyway.callto" :readonly="is_online">
-            <button class="btn btn-outline-success my-2 my-sm-0" v-cloak>{{ (skyway.call || skyway.room) ? "leave" : is_p2p ? "Call" : "Join" }}</button>
+            <input class="form-control mr-sm-2" type="text" :placeholder="is_p2p ? resource.text.input_peer : resource.text.input_room" aria-label="call" v-model="skyway.callto" :readonly="is_online">
+            <button class="btn btn-outline-success my-2 my-sm-0" v-cloak>{{ (skyway.call || skyway.room) ? "leave" : is_p2p ? resource.text.call : resource.text.join }}</button>
           </form>
         </div>
       </nav>
@@ -195,27 +195,27 @@
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Welcome</h4>
+              <h4 class="modal-title">{{ resource.text.welcome }}</h4>
             </div>
             <div class="modal-body">
               <div class="form-row">
                 <div class="col">
                   <div class="form-group">
-                    <label for="skyway-mode">Communication Model</label>
+                    <label for="skyway-mode">{{ resource.text.mode }}</label>
                     <select class="form-control" id="skyway-mode" name="mode" v-model="skyway.mode.value">
-                      <option value="p2p">P2P</option>
-                      <option value="mesh">Mesh</option>
-                      <option value="sfu">SFU</option>
+                      <option value="p2p">{{ resource.text.p2p }}</option>
+                      <option value="mesh">{{ resource.text.mesh }}</option>
+                      <option value="sfu">{{ resource.text.sfu }}</option>
                     </select>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-group">
-                    <label for="communication">Role</label>
+                    <label for="communication">{{ resource.text.role }}</label>
                     <select class="form-control" id="communication" v-model="skyway.transmit" :disabled="skyway.mode.value == 'sfu'">
-                      <option value="sr">Send and Recv</option>
-                      <option value="s">Send Only</option>
-                      <option value="r">Recv Only</option>
+                      <option value="sr">{{ resource.text.send_recv }}</option>
+                      <option value="s">{{ resource.text.send }}</option>
+                      <option value="r">{{ resource.text.recv }}</option>
                     </select>
                   </div>
                 </div>

@@ -65,6 +65,9 @@ const vm = new Vue({
     debug: {
       self_translation: false
     },
+    resource: {
+      text : {}
+    }
   },
   methods: {
     on_call: function () {
@@ -1218,5 +1221,25 @@ const vm = new Vue({
   },
   watch: {
   },
+  created: function () {
+    console.log("created")
+    // console.log(this.resource.text)
+    // console.log(consts)
+    var language = (window.navigator.languages && window.navigator.languages[0]) ||
+            window.navigator.language ||
+            window.navigator.userLanguage ||
+            window.navigator.browserLanguage;
+    if (language == "ja") {
+      this.resource.text = consts.localize.text.ja
+    }
+    else {
+      this.resource.text = consts.localize.text.en
+    }
+    consts.layout[0].label = this.resource.text.auto
+    consts.layout[1].label = this.resource.text.pinp
+    consts.layout[2].label = this.resource.text.grid
+    consts.renderer[0].label = this.resource.text.cover
+    consts.renderer[1].label = this.resource.text.normal
+  }
 });
 
