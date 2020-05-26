@@ -88,7 +88,7 @@ const consts = {
         "role": "接続方法",
         "send_recv": "送受信",
         "send" : "送信のみ",
-        "recv" : "受診のみ",
+        "recv" : "受信のみ",
         "camera": "カメラ",
         "microphone": "マイク",
         "speaker": "スピーカー",
