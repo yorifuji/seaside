@@ -1133,7 +1133,7 @@ const vm = new Vue({
 
     // Check API KEY
     if (window.__SKYWAY_KEY__ == "") {
-      alert("Please set your API KEY to window.__SKYWAY_KEY__")
+      alert("Please set your API KEY to window.__SKYWAY_KEY__ by key.js")
       return;
     }
 

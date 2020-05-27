@@ -88,7 +88,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_camera" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}">{{ resource.text.camera }}</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_camera" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}" v-cloak>{{ resource.text.camera }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown10">
                 <button type="button" class="dropdown-item" v-for="item in consts.video.size" :class="{active : video.size && item.value == video.size.value}" @click="on_select_size(item)">{{ item.label }}</button>
                 <div class="dropdown-divider"></div>
@@ -100,7 +100,7 @@
               </div>
             </li>
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_microphone" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : !has_microphone || is_recvonly}">{{ resource.text.microphone }}</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_microphone" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : !has_microphone || is_recvonly}" v-cloak>{{ resource.text.microphone }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_microphone">
                 <button type="button" class="dropdown-item" :class="{active : microphone.mute}" @click="on_select_microphone_mute()">{{ resource.text.mute }}</button>
                 <div class="dropdown-divider"></div>
@@ -108,7 +108,7 @@
               </div>
             </li>
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_speaker" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : !has_speaker || is_sendonly}">{{ resource.text.speaker }}</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_speaker" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : !has_speaker || is_sendonly}" v-cloak>{{ resource.text.speaker }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_speaker">
                 <button type="button" class="dropdown-item" @click="on_speaker_volume()">{{ resource.text.volume }}</button>
                 <div class="dropdown-divider"></div>
@@ -118,7 +118,7 @@
               </div>
             </li>
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_layout" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ resource.text.layout }}</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_layout" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-cloak>{{ resource.text.layout }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_layout">
                 <button type="button" class="dropdown-item" @click="on_toggle_fullscreen()">{{ resource.text.fullscreen }}</button>
                 <div class="dropdown-divider"></div>
@@ -128,13 +128,13 @@
               </div>
             </li>
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_share" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}">{{ resource.text.share }}</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_share" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}" v-cloak>{{ resource.text.share }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_layout">
                 <button type="button" class="dropdown-item" @click="on_select_screen_share()">{{ local_screen ? resource.text.share_finish : resource.text.share_start}}</button>
               </div>
             </li>
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_share" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}">{{ resource.text.experimental }}</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_share" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}" v-cloak>{{ resource.text.experimental }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_layout">
                 <button type="button" class="dropdown-item" @click="on_select_recognition()">{{ resource.text.voice_recognition }}</button>
               </div>
