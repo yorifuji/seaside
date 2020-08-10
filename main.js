@@ -1131,6 +1131,8 @@ const vm = new Vue({
   mounted: function () {
     dtr(`mounted`)
 
+    let showSettings = true
+
     // Check API KEY
     if (window.__SKYWAY_KEY__ == "") {
       alert("Please set your API KEY to window.__SKYWAY_KEY__ by key.js")
@@ -1141,7 +1143,7 @@ const vm = new Vue({
     this.translation.api = window.__TRANSLATE_URL__;
     dtr(`translation api: ${this.translation.api}`)
 
-    // Check URL
+    // Check hash
     const hash = location.hash.match(/^#(p2p|mesh|sfu)-([\w-]+)$/)
     if (hash) {
       dtr(`hash`, hash)
@@ -1161,15 +1163,36 @@ const vm = new Vue({
       }
     }
 
+    // Check query
+    const search = location.search.length > 0 ? location.search.slice(1) : null
+    if (search) {
+      dtr(`search`, search)
+      search.split("&").forEach(query => {
+        const [key, value] = query.split("=")
+        if (key == "showSettings") {
+          if (value == "true") {
+            showSettings = true
+          }
+          else if (value == "false") {
+            showSettings = false
+          }
+        }
+      })
+    }
+
     jQuery('#modal-recognition').on('hidden.bs.modal', (e) => {
       this.on_hidden_recognition_modal();
     })
 
-    jQuery('#modal-settings').on('hidden.bs.modal', (e) => {
+    if (showSettings) {
+      jQuery('#modal-settings').on('hidden.bs.modal', (e) => {
+        this.on_setup();
+      })
+      jQuery('#modal-settings').modal({show:true, backdrop:'static'});
+    }
+    else {
       this.on_setup();
-    })
-    jQuery('#modal-settings').modal({show:true, backdrop:'static'});
-
+    }
   },
   directives: {
     videostream: {
