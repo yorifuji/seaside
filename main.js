@@ -1169,12 +1169,15 @@ const vm = new Vue({
       dtr(`search`, search)
       search.split("&").forEach(query => {
         const [key, value] = query.split("=")
-        if (key == "welcomeDialog") {
-          if (value == "true") {
-            welcomeDialog = true
-          }
-          else if (value == "false") {
-            welcomeDialog = false
+        if (key == "welcomeDialog" && ["true", "false"].includes(value)) {
+          welcomeDialog = value == "true" ? true : false
+        }
+        else if (key == "mode") {
+          for (let mode of consts.skyway.mode) {
+            if (mode.value == value) {
+              this.skyway.mode = mode
+              break
+            }
           }
         }
       })
