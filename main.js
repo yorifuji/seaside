@@ -1131,7 +1131,7 @@ const vm = new Vue({
   mounted: function () {
     dtr(`mounted`)
 
-    let showSettings = true
+    let welcomeDialog = true
 
     // Check API KEY
     if (window.__SKYWAY_KEY__ == "") {
@@ -1169,12 +1169,12 @@ const vm = new Vue({
       dtr(`search`, search)
       search.split("&").forEach(query => {
         const [key, value] = query.split("=")
-        if (key == "showSettings") {
+        if (key == "welcomeDialog") {
           if (value == "true") {
-            showSettings = true
+            welcomeDialog = true
           }
           else if (value == "false") {
-            showSettings = false
+            welcomeDialog = false
           }
         }
       })
@@ -1184,7 +1184,7 @@ const vm = new Vue({
       this.on_hidden_recognition_modal();
     })
 
-    if (showSettings) {
+    if (welcomeDialog) {
       jQuery('#modal-settings').on('hidden.bs.modal', (e) => {
         this.on_setup();
       })
