@@ -232,7 +232,7 @@ const vm = new Vue({
 
       }
       else {
-        this.local_screen = navigator.mediaDevices.getDisplayMedia ? 
+        this.local_screen = navigator.mediaDevices.getDisplayMedia ?
           await navigator.mediaDevices.getDisplayMedia( { video: true, audio: true } ) :
           await navigator.mediaDevices.getUserMedia( {video: {mediaSource: "screen"}} );
         if (!this.local_screen) {
@@ -697,7 +697,12 @@ const vm = new Vue({
         // gUM
         this.local_stream = await navigator.mediaDevices.getUserMedia(constraints).catch(err => {
           dtr(err)
-          alert(`${err.name}:${err.message}:${err.constraintName}`);
+          if (err.name == "OverconstrainedError") {
+            alert(`${this.resource.text.OverconstrainedError}`);
+          }
+          else {
+            alert(`${err.name}:${err.message}:${err.constraintName}`);
+          }
           return
         })
         dtr(this.local_stream)
@@ -747,7 +752,12 @@ const vm = new Vue({
       // gUM
       let stream = await navigator.mediaDevices.getUserMedia(constraints).catch(err => {
         dtr(err)
-        alert(`${err.name}:${err.message}:${err.constraintName}`);
+        if (err.name == "OverconstrainedError") {
+          alert(`${this.resource.text.OverconstrainedError}`);
+        }
+        else {
+          alert(`${err.name}:${err.message}:${err.constraintName}`);
+        }
         return
       })
       if (stream == null) return
@@ -872,7 +882,7 @@ const vm = new Vue({
          for (; i < this.speaker.device.length; i++) {
           if (this.speaker.using.deviceId == this.speaker.device[i].deviceId) break;
         }
-        if (i == this.speaker.device.length) this.speaker.using = null; 
+        if (i == this.speaker.device.length) this.speaker.using = null;
       }
       if (this.camera.using) {
         let i = 0;

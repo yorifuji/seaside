@@ -110,7 +110,8 @@ const consts = {
         "leave": "退室",
         "call": "呼び出し",
         "input_room": "ルーム名を入力",
-        "input_peer": "PeerIDを入力"
+        "input_peer": "PeerIDを入力",
+        "OverconstrainedError" : "カメラが指定のフォーマットに対応していません"
       },
       en : {
         "welcome": "Welcome",
@@ -143,7 +144,8 @@ const consts = {
         "leave": "Leave",
         "call": "Call",
         "input_room": "Input Room Name",
-        "input_peer": "Input Peer ID"
+        "input_peer": "Input Peer ID",
+        "OverconstrainedError" : "The camera does not support the specified format"
       }
     }
   }
