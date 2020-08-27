@@ -1179,7 +1179,7 @@ const vm = new Vue({
       dtr(`search`, search)
       search.split("&").forEach(query => {
         const [key, value] = query.split("=")
-        if (key == "welcomeDialog" && ["true", "false"].includes(value)) {
+        if (["welcomeDialog", "showWelcome"].includes(key) && ["true", "false"].includes(value)) {
           welcomeDialog = value == "true" ? true : false
         }
         else if (key == "mode") {
