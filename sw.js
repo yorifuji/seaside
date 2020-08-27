@@ -1,4 +1,4 @@
-var CACHE_NAME  = "seaside-pwa-cache-20190825";
+var CACHE_NAME  = "pwa-cache-20190825";
 var urlsToCache = [
     // "index.html"
 ];

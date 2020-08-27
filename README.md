@@ -17,7 +17,7 @@ WebRTCを使ったビデオ通話アプリです。
 
 # デモ
 
-https://yorifuji.github.io/seaside/
+https://yorifuji.github.io/meets/
 
 Chrome@macOS で動作確認しています。
 
