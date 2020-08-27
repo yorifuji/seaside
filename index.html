@@ -67,21 +67,66 @@
       [v-cloak] {
         display: none;
       }
+      .colabora-container {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        z-index: 10;
+      }
+      .colabora-input {
+        position: absolute;
+        /* font-size: 100%; */
+        /* width: 200px; */
+        z-index: 11;
+        top: 10px;
+        /* width: 50%; */
+        opacity: 50%;
+        font-weight: bold;
+        color: white;
+        background-color: black;
+        text-align: center;
+      }
+      .colabora-badge {
+        position: absolute;
+        font-size: 120%;
+        z-index: 11;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      .colabora-badge-move {
+        color: red;
+      }
     </style>
   </head>
   <body>
     <div id="vue-app" class="container">
       <div class="video-container">
-        <div class="text-container" :class="{invisible : !feature.transcription }" v-cloak>
+        <div class="text-container" :class="{invisible : !transcription.enabled }" v-cloak>
           <p class="text-frame" v-for="message in messages" :class="{other: message.hasOwnProperty('from'), unresolved: message.hasOwnProperty('unresolved') && message.unresolved, translate: message.hasOwnProperty('translate') && message.translate }">{{ message.text }}</p>
         </div>
         <div class="video-frame" v-for="user in rendererUsers" :style="user.style">
           <video v-videostream="user.stream" :class="styleCover" @click="on_click_video(user.stream)" muted autoplay playsinline></video>
           <audio v-audiostream="user.stream"></audio>
         </div>
+        <div class="colabora-container" :class="{invisible : !colabora.enabled }" v-cloak @click="on_click_colabora_container">
+          <input class="form-control form-control-lg colabora-input" type="text" v-model="colabora.text" :class="{invisible : !colabora.input }">
+          <span class="badge colabora-badge"
+            v-for="badge in colabora.badges"
+            :class="[badge.color, {'colabora-badge-move': badge == colabora.badge_move}]"
+            :style="badge.style"
+            @click.stop="on_click_badge(badge, $event)">
+            {{ badge.text }}
+          </span>
+      </div>
       </div>
       <nav class="navbar fixed-bottom navbar-expand-md navbar-dark bg-dark">
-        <!-- <span class="navbar-brand">seaside</span> -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -103,6 +148,7 @@
               <span class="nav-link dropdown-toggle" id="dropdown_microphone" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : !has_microphone || is_recvonly}" v-cloak>{{ resource.text.microphone }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_microphone">
                 <button type="button" class="dropdown-item" :class="{active : microphone.mute}" @click="on_select_microphone_mute()">{{ resource.text.mute }}</button>
+                <button v-if="colabora.enabled" type="button" class="dropdown-item" :class="{active : colabora.mute_mic_automatically}" @click="on_select_microphone_mute_colabora()">{{ resource.text.mute_colabora }}</button>
                 <div class="dropdown-divider"></div>
                 <button type="button" class="dropdown-item" v-for="mic in microphone.device" :class="{active : microphone.using && microphone.using.deviceId == mic.deviceId}" @click="on_select_microphone(mic)">{{ mic.label }}</button>
               </div>
@@ -134,9 +180,11 @@
               </div>
             </li>
             <li class="nav-item dropup">
-              <span class="nav-link dropdown-toggle" id="dropdown_share" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}" v-cloak>{{ resource.text.experimental }}</span>
+              <span class="nav-link dropdown-toggle" id="dropdown_experimental" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :class="{disabled : is_recvonly}" v-cloak>{{ resource.text.experimental }}</span>
               <div class="dropdown-menu" aria-labelledby="dropdown_layout">
-                <button type="button" class="dropdown-item" @click="on_select_recognition()">{{ resource.text.voice_recognition }}</button>
+                <button type="button" class="dropdown-item" @click="on_select_settings()">{{ resource.text.settings }}</button>
+                <button type="button" class="dropdown-item" @click="on_select_colabora()" :class="{active : colabora.enabled}" >{{ resource.text.colabora }}</button>
+                <button type="button" class="dropdown-item" @click="on_select_recognition()" :class="{active : transcription.enabled}">{{ resource.text.voice_recognition }}</button>
               </div>
             </li>
           </ul>
@@ -147,18 +195,18 @@
           </form>
         </div>
       </nav>
-      <div id="modal-recognition" class="modal fade">
+      <div id="modal-settings" class="modal fade">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Speech Recognition</h4>
+              <h4 class="modal-title">Settings</h4>
               <!-- <h4 class="modal-title">Speech Recognition and Translation</h4> -->
             </div>
             <div class="modal-body">
-              <label for="transcription">
-                <input type="checkbox" id="transcription" v-model="feature.transcription" :disabled="!support_speech_recognition" />Use Speech Recognition
+              <!-- <label for="transcription">
+                <input type="checkbox" id="transcription" v-model="transcription.enabled" :disabled="!support_speech_recognition" />Use Speech Recognition
               </label>
-              <br>
+              <br> -->
               Select Your Language
               <select name="language" v-model="feature.lang" :disabled="!support_speech_recognition">
                 <option value="ja-JP">Japanese</option>
@@ -191,7 +239,7 @@
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
       </div><!-- /.modal -->
-      <div id="modal-settings" class="modal">
+      <div id="modal-welcome" class="modal">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
@@ -309,6 +357,8 @@
         $(".container").height(window.innerHeight - $(".navbar").outerHeight());
         $(".text-container").width(0.25 * window.innerWidth);
         $(".text-container").height(window.innerHeight - $(".navbar").outerHeight());
+        $(".colabora-input").width(0.4 * window.innerWidth);
+        $('.colabora-input').css({'left': 0.6 * window.innerWidth / 2 + "px"});
         vm.update_video_layout()
       });
     </script>

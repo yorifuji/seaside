@@ -94,6 +94,7 @@ const consts = {
         "speaker": "スピーカー",
         "volume": "ボリューム",
         "mute": "ミュート",
+        "mute_colabora": "ミュート（キーボード押下中）",
         "layout": "レイアウト",
         "auto": "自動（デフォルト）",
         "pinp": "ピクチャー・イン・ピクチャー",
@@ -111,7 +112,9 @@ const consts = {
         "call": "呼び出し",
         "input_room": "ルーム名を入力",
         "input_peer": "PeerIDを入力",
-        "OverconstrainedError" : "カメラが指定のフォーマットに対応していません"
+        "OverconstrainedError" : "カメラが指定のフォーマットに対応していません",
+        "colabora" : "コラボラ",
+        "settings" : "設定",
       },
       en : {
         "welcome": "Welcome",
@@ -128,6 +131,7 @@ const consts = {
         "speaker": "Speaker",
         "volume": "Volume",
         "mute": "Mute",
+        "mute_colabora": "Mute (at Key Press)",
         "layout": "Layout",
         "auto": "Auto(default)",
         "pinp": "Picture in Picture",
@@ -145,7 +149,9 @@ const consts = {
         "call": "Call",
         "input_room": "Input Room Name",
         "input_peer": "Input Peer ID",
-        "OverconstrainedError" : "The camera does not support the specified format"
+        "OverconstrainedError" : "The camera does not support the specified format",
+        "colabora" : "Colabora",
+        "settings" : "Settings",
       }
     }
   }
